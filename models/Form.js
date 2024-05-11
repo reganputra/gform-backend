@@ -1,36 +1,33 @@
 import mongoose from "mongoose";
 
-const Schema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
-    title: {
-      type: String,
-
-      unique: true,
-    },
-    description: {
-      type: String,
-    },
-    questions: {
-      type: Array,
-    },
-    invites: {
-      type: Array,
-    },
-    public: {
-      type: Boolean,
-    },
-    createdAt: {
-      type: Number,
-    },
-    updateAt: {
-      type: Number,
-    },
+const Schema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
   },
-  {
+  title: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  questions: {
+    type: Array,
+  },
+  invites: {
+    type: Array,
+  },
+  public: {
+    type: Boolean,
+  },
+  createdAt: {
+    type: Number,
+  },
+  updateAt: {
+    type: Number,
+  },
+},
+{
     timestamps: {
       currentTime: () => Math.floor(Date.now() / 1000),
     },
@@ -38,3 +35,4 @@ const Schema = new mongoose.Schema(
 );
 
 export default mongoose.model("Form", Schema);
+
