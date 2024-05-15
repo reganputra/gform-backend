@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Form from "../models/Form.js";
 
 class FormController {
+
+    // Indexing all forms
     async index(req, res) {
         try {
             const limit = parseInt(req.query.limit) || 10
@@ -44,7 +46,7 @@ class FormController {
                 form
             })
         } catch (error) {
-            return res.status(500).json({
+            return res.status(error.code || 500).json({
                 status: false,
                 message: error.message
             })
@@ -99,6 +101,7 @@ class FormController {
         }
     }
 
+    // Delete a Form
     async destroy(req, res) {
         try {
             if (!req.params.id) { throw { code: 400, message: "Required Form ID" } }
