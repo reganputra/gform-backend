@@ -1,22 +1,21 @@
 import mongoose from "mongoose";
 import Form from "../models/Form.js";
 
-const allowedTypes = ['Text', 'Radio', 'Checkbox', 'Email', 'Dropdown']
+const allowedTypes = ['Text', 'Radio', 'Checkbox', 'Dropdown', 'Email']
 
 class QuestionController {
 
-    // Indexing questions
     async index(req, res) {
         try {
-            if(!req.params.id) { throw { code: 428, message: "FORM_ID_REQUIRED" } }
+            if(!req.params.id) { throw { code: 400, message: "ID_REQUIRED" } }
             if(!mongoose.Types.ObjectId.isValid(req.params.id)) { throw { code: 400, message: "INVALID_ID" } }
 
             const form = await Form.findOne({_id: req.params.id, userId: req.jwt.id})
-            if(!form) {throw{code: 400, message: "FORM_NOT_FOUND"}}
+            if(!form) {throw{code:400, message: "Form_Not_Found"}}
 
             return res.status(200).json({
                 status: true,
-                message: "FORM_FOUND",
+                message: "Form_Found",
                 form
             })
 
@@ -29,45 +28,44 @@ class QuestionController {
         }
     }
 
-    // Create a new question
-    async store(req, res) {
+    async store (req, res) {
         try {
-            //check form id
-            if(!req.params.id) { throw { code: 428, message: "ID_REQUIRED" } }
+            
+            if(!req.params.id) { throw { code: 400, message: "ID_REQUIRED" } }
             if(!mongoose.Types.ObjectId.isValid(req.params.id)) { throw { code: 400, message: "INVALID_ID" } }
 
-            //input field
+           
             let newQuestion = {
                 id: new mongoose.Types.ObjectId(),
                 type: 'Text',
                 question: null,
                 options: [],
                 required: false,
-            }
+            };
 
-            //update form
-            const question = await Form.findOneAndUpdate(
+            
+            const form = await Form.findOneAndUpdate(
                                         { _id: req.params.id, userId: req.jwt.id }, 
                                         { $push: { questions: newQuestion } }, 
                                         { new: true })
 
-            if(!question) { throw { code: 500, message: "ADD_QUESTION_FAILED" } }
+            if(!form) { throw { code: 400, message: "ADD_QUESTION_FAILED" } }
 
             res.status(200).json({
                     status: true,
                     message: 'ADD_QUESTION_SUCCESS',
                     question: newQuestion
                 })
-        } catch (error) {
-            res.status(error.code || 500)
+        } catch (err) {
+            res.status(err.code || 500)
                 .json({
                     status: false,
-                    message: error.message,
+                    message: err.message,
                 })
         }
+
     }
 
-    // Update a question
     async update(req, res) {
         try {
             //check form id
@@ -88,7 +86,7 @@ class QuestionController {
                 field['questions.$[indexQuestion].type'] = req.body.type
             }
 
-            //update form
+            
             const question = await Form.findOneAndUpdate(
                                         { _id: req.params.id, userId: req.jwt.id }, 
                                         { $set : field },
@@ -113,7 +111,6 @@ class QuestionController {
         }
     }
 
-    // Delete a question
     async destroy(req, res) {
         try {
             //check form id
@@ -122,13 +119,12 @@ class QuestionController {
             if(!mongoose.Types.ObjectId.isValid(req.params.id)) { throw { code: 400, message: "INVALID_ID" } }
             if(!mongoose.Types.ObjectId.isValid(req.params.questionId)) { throw { code: 400, message: "INVALID_QUESTION_ID" } }
 
-            //input field
             
 
             //update form
             const question = await Form.findOneAndUpdate(
                                         { _id: req.params.id, userId: req.jwt.id }, 
-                                        { $pull: { questions: {id: new mongoose.Types.ObjectId(req.params.questionId)} } })
+                                        { $pull: { questions: {id: new mongoose.Types.ObjectId(req.params.questionId)} } }, {new: true})
 
             if(!question) { throw { code: 400, message: "DELETE_QUESTION_FAILED" } }
 
@@ -145,8 +141,7 @@ class QuestionController {
                 })
         }
     }
+
 }
 
-
-export default new QuestionController();
-
+export default new QuestionController()
