@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Form from "../models/Form.js";
+import User from "../models/User.js";
 
 class FormController {
 
@@ -113,6 +114,36 @@ class FormController {
             return res.status(200).json({
                 status: true,
                 message: "Form delete successfully",
+                form
+            })
+
+        } catch (error) {
+            return res.status(error.code || 500).json({
+                status: false,
+                message: error.message,
+
+            })
+        }
+    }
+
+    async showToUser(req, res) {
+        try {
+            if (!req.params.id) { throw { code: 400, message: "ID Required" } }
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) { throw { code: 400, message: "Invalid Form Id" } }
+
+            const form = await Form.findOne({ _id: req.params.id })
+            if (!form) { throw { code: 400, message: "Form not Found" } }
+
+            if(req.jwt.id != form.userId && form.public === false) {
+                const user = await User.findOne({_id: req.jwt.id})
+
+                if(!form.invites.includes(user.email)) {throw{code: 400, message: "You_Are_Not_Invited"}}
+            }
+
+            form.invites = []
+            return res.status(200).json({
+                status: true,
+                message: "Form retrieved successfully",
                 form
             })
 

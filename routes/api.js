@@ -4,8 +4,7 @@ import FormController from "../controllers/FormController.js";
 import jwtAuth from "../middleware/jwtAuth.js";
 import QuestionController from "../controllers/QuestionController.js";
 import OptionController from "../controllers/OptionController.js";
-
-
+import AnswerController from "../controllers/AnswerController.js";
 
 
 const router = express.Router();
@@ -21,6 +20,7 @@ router.post("/forms", jwtAuth(), FormController.store);
 router.get("/forms/:id", jwtAuth(), FormController.show);
 router.put("/forms/:id", jwtAuth(), FormController.update);
 router.delete("/forms/:id", jwtAuth(), FormController.destroy);
+router.get("/forms/:id/users", jwtAuth(), FormController.showToUser);
 
 // Question
 router.get("/forms/:id/questions", jwtAuth(), QuestionController.index);
@@ -33,8 +33,7 @@ router.post("/forms/:id/questions/:questionId/options", jwtAuth(), OptionControl
 router.put("/forms/:id/questions/:questionId/options/:optionId", jwtAuth(), OptionController.update);
 router.delete("/forms/:id/questions/:questionId/options/:optionId", jwtAuth(), OptionController.destroy);
 
-
-
-
+// Answer
+router.post("/answers/:formId", jwtAuth(), AnswerController.store);
 
 export default router;
