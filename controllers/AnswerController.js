@@ -3,6 +3,7 @@ import Form from "../models/Form.js";
 import Answer from "../models/Answer.js";
 import answerDuplicate from "../libraries/answerDuplicate.js";
 import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
+import optionValueNoExist from "../libraries/optionValueNoExist.js";
 
 
 class AnswerController {
@@ -20,30 +21,34 @@ class AnswerController {
         const questionRequiredEmpty = await questionRequiredButEmpty(form, req.body.answers)
         if(questionRequiredEmpty) {throw{code: 400, message: "Required_Question_Is_Empty"}}
 
+        const optionNotExist = await optionValueNoExist(form, req.body.answers)
+        if(optionNotExist) {throw{code: 400, message: "Required_Value_Is_Empty", question: optionNotExist}}
+
 
         let fields = {}
         req.body.answers.forEach(answer => {
             fields[answer.questionId] = answer.value
         })
 
-        const answer = Answer.create({
+        const answers = await Answer.create({
             formId: req.params.formId,
             userId: req.jwt.id,
             ...fields
         })
-        if(!answer) {throw{ code: 400, message: "Answer_Failed"}}
+        if(!answers) {throw{ code: 400, message: "Answer_Failed"}}
 
         return res.status(200).json({
             status: true,
             message: "Answer_Success",
-            answer
+            answers
         })
         
         } catch (error) {
             res.status(error.code || 500)
                 .json({
                     status: false,
-                    message: error.message
+                    message: error.message,
+                    question: error.question || null
                 })
         }
     }
