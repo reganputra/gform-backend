@@ -4,6 +4,9 @@ import Answer from "../models/Answer.js";
 import answerDuplicate from "../libraries/answerDuplicate.js";
 import questionRequiredButEmpty from "../libraries/questionRequiredButEmpty.js";
 import optionValueNoExist from "../libraries/optionValueNoExist.js";
+import questionIdNotValid from "../libraries/questionIdNotValid.js";
+import emailNotValid from "../libraries/emailNotValid.js";
+
 
 
 class AnswerController {
@@ -22,7 +25,13 @@ class AnswerController {
         if(questionRequiredEmpty) {throw{code: 400, message: "Required_Question_Is_Empty"}}
 
         const optionNotExist = await optionValueNoExist(form, req.body.answers)
-        if(optionNotExist) {throw{code: 400, message: "Required_Value_Is_Empty", question: optionNotExist}}
+        if(optionNotExist.length > 0) {throw{code: 400, message: "Required_Value_Is_Empty", question: optionNotExist[0].question}}
+
+        const questionNotExist = await questionIdNotValid(form, req.body.answers)
+        if(questionNotExist.length > 0) {throw{code: 400, message: "Question_Is_Not_Exist", question: questionNotExist[0].questionId }}
+
+        const emailIsNotValid = await emailNotValid(form, req.body.answers)
+        if(emailIsNotValid.length > 0) {throw{code: 400, message: "Email_Is_Not_Valid", question: emailIsNotValid[0].questionId }}
 
 
         let fields = {}

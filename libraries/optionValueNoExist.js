@@ -27,7 +27,7 @@ const optionValueNoExist = async (form, answers) => {
         }
         
     })
-    return found.length > 0 ? found[0].question : false
+    return found
     // return true
 }
 

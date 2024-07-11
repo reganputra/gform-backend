@@ -3,7 +3,7 @@ const questionRequiredButEmpty = async (form, answers) => {
     if(question.required == true){
         const answer = answers.find((answer) => answer.questionId == question.id)
 
-        if(answer == undefined || answer.value == undefined || answer.value == '') {
+        if(answer == undefined || answer.value == undefined || answer.value === null || answer.value == '') {
             return true
         }
     }
