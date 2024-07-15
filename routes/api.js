@@ -5,6 +5,7 @@ import jwtAuth from "../middleware/jwtAuth.js";
 import QuestionController from "../controllers/QuestionController.js";
 import OptionController from "../controllers/OptionController.js";
 import AnswerController from "../controllers/AnswerController.js";
+import InviteController from "../controllers/InviteController.js";
 
 
 const router = express.Router();
@@ -35,5 +36,11 @@ router.delete("/forms/:id/questions/:questionId/options/:optionId", jwtAuth(), O
 
 // Answer
 router.post("/answers/:formId", jwtAuth(), AnswerController.store);
+
+// Invites
+// router.get("/forms/:id/questions", jwtAuth(), QuestionController.index);
+router.post("/forms/:id/invites", jwtAuth(), InviteController.store);
+// router.put("/forms/:id/questions/:questionId", jwtAuth(), QuestionController.update);
+// router.delete("/forms/:id/questions/:questionId", jwtAuth(), QuestionController.destroy);
 
 export default router;
