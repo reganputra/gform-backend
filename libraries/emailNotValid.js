@@ -11,7 +11,7 @@ const emailNotValid = async(form, answers) => {
         }
 
         if(answer){
-            if(/[a-z0]+@[a-z]+\.[a-z]{2,3}/.test(answer.value) === false) {
+            if(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(answer.value) === false) {
                 return true
             }
         }
