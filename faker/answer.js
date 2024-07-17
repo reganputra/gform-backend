@@ -1,11 +1,12 @@
-import  connection  from "../connection.js";
 import {faker} from "@faker-js/faker"
 import Answer from "../models/Answer.js"
 
-connection()
+const run = async (limit) =>{
+try {
 
-let data = []
-for(let i=0; i<20; i++){
+    let data = []
+
+    for(let i = 0; i < limit; i++){
     data.push({
         "6695cf5189a3dd563684b328": faker.person.fullName(),
         "6684a8cc478516e9586b867c": faker.helpers.arrayElement(["53", "20"]),
@@ -13,6 +14,23 @@ for(let i=0; i<20; i++){
         "formId": "6684a8bd478516e9586b867a",
         "userId": "6684b205ff39f75504c1319c"
     })
+ }
+
+   const fakeData = await Answer.insertMany(data)
+   if(fakeData) {
+    console.log(fakeData)
+    process.exit()
+   }
+
+} catch (error) {
+    console.log(error)
+    process.exit()
 }
 
-Answer.insertMany(data)
+
+}
+
+export {run}
+
+
+
