@@ -11,4 +11,4 @@ $ npm run start
 
 ### `env file`
 
-Rename `sample.env` menjadi `.env`, kemudian sesuaikan settingan sesuai dengan pc/server kamu
+Rename `.env.example` menjadi `.env`, kemudian sesuaikan settingan sesuai dengan pc/server kamu
