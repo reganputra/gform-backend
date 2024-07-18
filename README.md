@@ -1,1 +1,14 @@
-On progress.....(I'm confused about whether to do the front-end or back-end first)
+#Setup
+
+```bash
+
+# install dependencies
+$ npm install
+
+# di localhost jalankan
+$ npm run start
+```
+
+### `env file`
+
+Rename `sample.env` menjadi `.env`, kemudian sesuaikan settingan sesuai dengan pc/server kamu
