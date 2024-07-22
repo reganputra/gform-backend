@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/User.js";
 import emailExists from "../libraries/emailExists.js";
+import isEmailValid from "../libraries/isEmailValid.js";
 
 const env = dotenv.config().parsed;
 
@@ -34,6 +35,7 @@ class AuthController {
       if (req.body.password.length < 6) {
         throw { code: 400, message: "PASSWORD_MINIMUM_6_CHARACTER" };
       }
+      if(!isEmailValid(req.body.email)){ throw{ code: 400, message: "Invalid_Email"}}
 
       // Check if the email already exists
       const isEmailExists = await emailExists(req.body.email);

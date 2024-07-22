@@ -1,3 +1,5 @@
+import isEmailValid from "./isEmailValid.js"
+
 const emailNotValid = async(form, answers) => {
 
  const found = form.questions.filter((question) => {
@@ -11,7 +13,7 @@ const emailNotValid = async(form, answers) => {
         }
 
         if(answer){
-            if(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(answer.value) === false) {
+            if(!isEmailValid(answer.value)) {
                 return true
             }
         }
