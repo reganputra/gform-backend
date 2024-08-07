@@ -32,4 +32,5 @@ const jwtAuth = () => {
   };
 };
 
+
 export default jwtAuth;
